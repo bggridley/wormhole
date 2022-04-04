@@ -5,7 +5,7 @@ Started/finished week of 10/24/21
 
 var gl;
 var programInfo;
-var eye;  
+var eye;
 var up;
 var direction;
 var torusBuffers;
@@ -37,13 +37,13 @@ class WorldObject {
     draw(gl, projectionMatrix, viewMatrix) {
         const modelViewMatrix = mat4.create();
 
-        mat4.translate(modelViewMatrix,   
-            modelViewMatrix,    
-            [this.x, this.y, this.z]); 
+        mat4.translate(modelViewMatrix,
+            modelViewMatrix,
+            [this.x, this.y, this.z]);
         mat4.rotate(modelViewMatrix,
-            modelViewMatrix, 
+            modelViewMatrix,
             torusRotation,
-            [0, -1, 0]); 
+            [0, -1, 0]);
 
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);
@@ -208,7 +208,7 @@ function loadWebGL() {
     varying highp vec3 vVertexColor;
 
       void main() {
-            gl_FragColor = vec4(vVertexColor.xyz * vLighting, 1.0);
+            gl_FragColor = vec4(vVertexColor.xyz, 1.0);
       }
     `;
 
@@ -261,6 +261,8 @@ function update() {
 
 }
 
+var sugma = 50;
+
 function drawScene() {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
@@ -269,7 +271,9 @@ function drawScene() {
     gl.depthFunc(gl.LEQUAL);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    const fieldOfView = (140) * Math.PI / 180;
+    sugma++;
+    
+    const fieldOfView = (150 + 15 * Math.sin(sugma / 500)) * Math.PI / 180;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 1000.0;
@@ -362,17 +366,56 @@ function initTorusBuffers(gl) {
             vertexNormals.push(dyy);
             vertexNormals.push(dzz);
 
-            if (Math.random() > 0.04) {
-                vertexColors.push(0.1 + Math.random());
-                vertexColors.push(Math.random() / 4);
-                vertexColors.push(Math.random());
-            } else {
-                vertexColors.push(1.0);
-                vertexColors.push(1.0);
-                vertexColors.push(0.7);
-            }
-        }
 
+
+
+            var segment = seg1 / 6;
+
+            var r = 0;
+            var g = 0;
+            var b = 0;
+
+            if (Math.random() < 0.95) {
+                if (i < segment * 1) {
+                    r = 1.0;
+                    g = (Math.random() * 0.5);
+                    b = (i / segment);
+                } else if (i < (segment * 2)) {
+                    r = (1 - ((i - segment) / segment)); // goes to 0
+                    g = (Math.random() * 0.5);
+                    b = (1.0);
+                    //alert("workign?");
+                } else if (i < (segment * 3)) {
+                    r = (Math.random() * 0.15); // goes to 0
+                    g = (0.15 + ((i - (segment * 2)) / segment) + Math.random() * 0.15);
+                    b = (1);
+                    //alert("workign?");
+                } else if (i < (segment * 4)) {
+                    r = (Math.random() * 0.5); // goes to 0
+                    g = (1.0);
+                    b = (1 - ((i - (segment * 3)) / segment));
+                    //alert("workign?");
+                } else if (i < (segment * 5)) {
+                    r = ((i - (segment * 4)) / segment);
+                    g = (1.0);
+                    b = (Math.random() * 0.15);
+
+                } else if (i < (segment * 6)) {
+                    r = (1.0); // goes to 0
+                    g = (1.0 - ((i - (segment * 5)) / segment));
+                    b = (0);
+
+                }
+            } else {
+                r = (1.0);
+                g = (1.0);
+                b = (1.0);
+            }
+
+            vertexColors.push(r);//(0.85 + (Math.random() * 0.15)));
+            vertexColors.push(g);//(0.85 + (Math.random()  * 0.15)));
+            vertexColors.push(b);//(0.85 + (Math.random() * 0.15)));
+        }
     }
 
     for (var i = 0; i < seg1 - 1; i++) {
