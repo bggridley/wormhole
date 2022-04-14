@@ -384,27 +384,22 @@ function initTorusBuffers(gl) {
                     r = (1 - ((i - segment) / segment)); // goes to 0
                     g = (Math.random() * 0.5);
                     b = (1.0);
-                    //alert("workign?");
-                } else if (i < (segment * 3)) {
+                } else if (i < (segment * 2.75)) {
                     r = (Math.random() * 0.15); // goes to 0
-                    g = (0.15 + ((i - (segment * 2)) / segment) + Math.random() * 0.15);
+                    g = (0.15 + ((i - (segment * 2)) / segment) + Math.random() * 0.25);
                     b = (1);
-                    //alert("workign?");
                 } else if (i < (segment * 4)) {
                     r = (Math.random() * 0.5); // goes to 0
-                    g = (1.0);
-                    b = (1 - ((i - (segment * 3)) / segment));
-                    //alert("workign?");
+                    g = (1.0 - Math.random() * 0.05);
+                    b = (1 - ((i - (segment * 3)) / segment)) + Math.random() * 0.15;
                 } else if (i < (segment * 5)) {
                     r = ((i - (segment * 4)) / segment);
-                    g = (1.0);
+                    g = (1.0) - Math.random() * 0.05;
                     b = (Math.random() * 0.15);
-
                 } else if (i < (segment * 6)) {
                     r = (1.0); // goes to 0
                     g = (1.0 - ((i - (segment * 5)) / segment));
                     b = (0);
-
                 }
             } else {
                 r = (1.0);
